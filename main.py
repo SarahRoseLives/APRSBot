@@ -90,7 +90,7 @@ def connect_to_aprs():
     # Debugging output for connection info
     print(f"Connecting to APRS-IS server {SERVER}:{PORT} as {CALLSIGN}")
 
-    # Use the 'b' filter to receive only messages addressed to K8SDR
+    # Use the 'b' filter to receive only messages addressed to bot callsign
     client.set_filter(f"b/{CALLSIGN}")
     print(f"Filter set to listen only for messages addressed to {CALLSIGN}")
 
