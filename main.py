@@ -12,14 +12,6 @@ PORT = 14580
 # List of received message IDs to avoid duplicate ACKs
 received_msgs = set()
 
-# Command-response mapping
-commands = {
-    "help": "I'm an example bot: https://github.com/SarahRoseLives/APRSBot",
-    "status": "Bot is operational. Type 'help' for more commands.",
-    # Add more commands and responses here
-}
-
-
 def send_ack(client, msgNo, to_call):
     """Function to send ACK in a separate thread."""
     # Ensure the 'to_call' is 9 characters long, padded with spaces
@@ -75,11 +67,19 @@ def handle_packet(packet):
             print(f"Starting thread to send ACK for msgNo: {msgNo} from: {from_call}")
             threading.Thread(target=send_ack, args=(client, msgNo, from_call)).start()
 
-        # Handle command responses
-        command_response = commands.get(message_text.lower())
-        if command_response:
+        # Handle command responses using if statements
+        message_text_lower = message_text.lower()
+        if message_text_lower == "help":
+            response_message = "I'm an example bot: https://github.com/SarahRoseLives/APRSBot"
+        elif message_text_lower == "status":
+            response_message = "Bot is operational. Type 'help' for more commands."
+        # Add more commands and responses here
+        else:
+            response_message = None
+
+        if response_message:
             print(f"Received command '{message_text}' from {from_call}, sending response...")
-            threading.Thread(target=send_response, args=(client, from_call, command_response)).start()
+            threading.Thread(target=send_response, args=(client, from_call, response_message)).start()
 
 
 def connect_to_aprs():
