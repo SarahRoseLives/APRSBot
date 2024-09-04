@@ -5,7 +5,7 @@ import time
 
 # APRS login details
 CALLSIGN = "NOCALL"
-PASSCODE = "123456" # Your passcode here
+PASSCODE = "123456"  # Your passcode here
 
 # APRS server settings
 SERVER = "rotate.aprs2.net"
@@ -13,6 +13,7 @@ PORT = 14580
 
 # List of received message IDs to avoid duplicate ACKs
 received_msgs = set()
+
 
 def send_ack(client, msgNo, to_call):
     """Function to send ACK in a separate thread."""
@@ -39,14 +40,19 @@ def send_response(client, to_call, response_message):
     # Ensure the 'to_call' is 9 characters long, padded with spaces
     to_call_padded = f"{to_call:<9}"
 
-    # Format the response message
-    response = f"{CALLSIGN}>APRS::{to_call_padded}:{response_message}"
-    try:
-        print(f"Sending response: {response}")
-        client.sendall(response)  # Send as a string
-        print(f"Response sent to {to_call}")
-    except Exception as e:
-        print(f"Error sending response: {e}")
+    # Split the response message if it's longer than 48 characters
+    messages = [response_message[i:i + 48] for i in range(0, len(response_message), 48)]
+
+    for msg in messages:
+        # Format the response message
+        response = f"{CALLSIGN}>APRS::{to_call_padded}:{msg}"
+        try:
+            print(f"Sending response: {response}")
+            client.sendall(response)  # Send as a string
+            print(f"Response sent to {to_call}")
+        except Exception as e:
+            print(f"Error sending response: {e}")
+        time.sleep(5)  # Delay between sending multiple messages
 
 
 def handle_packet(packet):
@@ -72,10 +78,10 @@ def handle_packet(packet):
 
         # Handle command responses using if statements
         message_text_lower = message_text.lower()
-        if message_text_lower == "help":
-            response_message = "I'm an example bot: https://github.com/SarahRoseLives/APRSBot"
+        if message_text_lower == "?":
+            response_message = "https://github.com/SarahRoseLives/APRSBot"
         elif message_text_lower == "status":
-            response_message = "Bot is operational. Type 'help' for more commands."
+            response_message = "Bot is operational. Type 'help' for more."
         # Add more commands and responses here
         else:
             response_message = None
