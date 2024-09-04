@@ -40,8 +40,29 @@ def send_response(client, to_call, response_message):
     # Ensure the 'to_call' is 9 characters long, padded with spaces
     to_call_padded = f"{to_call:<9}"
 
-    # Split the response message if it's longer than 48 characters
-    messages = [response_message[i:i + 48] for i in range(0, len(response_message), 48)]
+    # Function to split the message at the nearest space before the limit
+    def split_message(message, limit=48):
+        words = message.split()
+        parts = []
+        current_part = ""
+
+        for word in words:
+            # Check if adding the next word would exceed the limit
+            if len(current_part) + len(word) + 1 > limit:
+                parts.append(current_part)
+                current_part = word
+            else:
+                if current_part:
+                    current_part += " "
+                current_part += word
+
+        # Add the last part if there's any content left
+        if current_part:
+            parts.append(current_part)
+
+        return parts
+
+    messages = split_message(response_message)
 
     for msg in messages:
         # Format the response message
@@ -53,6 +74,7 @@ def send_response(client, to_call, response_message):
         except Exception as e:
             print(f"Error sending response: {e}")
         time.sleep(5)  # Delay between sending multiple messages
+
 
 
 def handle_packet(packet):
@@ -79,7 +101,7 @@ def handle_packet(packet):
         # Handle command responses using if statements
         message_text_lower = message_text.lower()
         if message_text_lower == "?":
-            response_message = "https://github.com/SarahRoseLives/APRSBot"
+            response_message = "Source: https://github.com/SarahRoseLives/APRSBot"
         elif message_text_lower == "status":
             response_message = "Bot is operational. Type 'help' for more."
         # Add more commands and responses here
