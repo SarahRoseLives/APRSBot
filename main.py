@@ -1,9 +1,11 @@
 import aprslib
 import threading
+import queue
+import time
 
 # APRS login details
 CALLSIGN = "NOCALL"
-PASSCODE = "12345"  # Enter your APRS Passcode
+PASSCODE = "123456" # Your passcode here
 
 # APRS server settings
 SERVER = "rotate.aprs2.net"
@@ -24,6 +26,7 @@ def send_ack(client, msgNo, to_call):
     # Correctly format the ACK message
     ack_message = f"{CALLSIGN}>APRS::{to_call_padded}:ack{msgNo}"
     try:
+        time.sleep(5)
         print(f"Sending ACK: {ack_message}")
         client.sendall(ack_message)  # Send as a string
         print(f"ACK sent for message {msgNo} to {to_call}")
@@ -78,6 +81,7 @@ def handle_packet(packet):
             response_message = None
 
         if response_message:
+            time.sleep(5)
             print(f"Received command '{message_text}' from {from_call}, sending response...")
             threading.Thread(target=send_response, args=(client, from_call, response_message)).start()
 
