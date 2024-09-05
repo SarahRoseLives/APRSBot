@@ -12,7 +12,7 @@ SERVER = "rotate.aprs2.net"
 PORT = 14580
 
 # Path to the commands folder
-COMMANDS_FOLDER = "commands"
+COMMANDS_FOLDER = "modules"
 
 # List of received message IDs to avoid duplicate ACKs
 received_msgs = set()
@@ -38,10 +38,10 @@ def send_ack(client, msgNo, to_call):
         msgNo += "}"
     ack_message = f"{CALLSIGN}>APRS::{to_call_padded}:ack{msgNo}"
     try:
-        time.sleep(5)
         print(f"Sending ACK: {ack_message}")
         client.sendall(ack_message)
         print(f"ACK sent for message {msgNo} to {to_call}")
+        time.sleep(5)
     except Exception as e:
         print(f"Error sending ACK: {e}")
 

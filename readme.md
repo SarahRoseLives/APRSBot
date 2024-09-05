@@ -34,17 +34,9 @@ Before running the bot, ensure you have the following:
 
 2. **Customize Commands:**
 
-   You can add or modify commands and responses by updating the `commands` if statements `main.py`. For example:
+   You can add or modify commands and response by updating files in the 'commands' folder.
 
-   ```python
-        if message_text_lower == "help":
-            response_message = "I'm an example bot: https://github.com/SarahRoseLives/APRSBot"
-        elif message_text_lower == "status":
-            response_message = "Bot is operational. Type 'help' for more commands."
-        # Add more commands and responses here
-   ```
 
-   The dictionary maps command keywords to their respective responses.
 
 ## Running the Bot
 
