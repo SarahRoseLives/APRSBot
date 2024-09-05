@@ -2,6 +2,8 @@ import aprslib
 import threading
 import queue
 import time
+import importlib
+import os
 
 # APRS login details
 CALLSIGN = "NOCALL"
