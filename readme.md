@@ -43,7 +43,7 @@ Before running the bot, ensure you have the following:
 1. Clone the repository or download the `main.py` file.
 
    ```bash
-   git clone https://github.com/YourUsername/APRSBot.git
+   git clone https://github.com/SarahRoseLives/APRSBot.git
    cd APRSBot
    ```
 
